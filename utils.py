@@ -1,8 +1,18 @@
-import requests
 import json
+from string import punctuation
+
+import nltk
+import requests
+from nltk.corpus import stopwords
+from pymystem3 import Mystem
+
 from notebooks.secret import access_token
 
 base_url = 'https://api.vk.com/method/'
+
+mystem = Mystem()
+russian_stopwords = stopwords.words("russian")
+nltk.download("stopwords")
 
 
 def execute(method, params):
@@ -28,3 +38,11 @@ def execute(method, params):
         err = f'error while parsing: {e}'
     return err, response
 
+
+def clean_text(text):
+    tokens = mystem.lemmatize(text.lower())
+    tokens = [token for token in tokens if token not in russian_stopwords
+              and token != " "
+              and token.strip() not in punctuation]
+
+    return " ".join(tokens)
