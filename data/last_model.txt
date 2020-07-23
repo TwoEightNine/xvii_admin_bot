@@ -1,2 +1,2 @@
-data/model_tfidf_thu_jul_23_15:24:22_2020.pkl
-data/model_exp_thu_jul_23_15:24:22_2020.txt
+data/model_tfidf_thu_jul_23_16:28:10_2020.pkl
+data/model_exp_thu_jul_23_16:28:10_2020.txt

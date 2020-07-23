@@ -1,0 +1,12 @@
+{
+  "hi": [1, 5, 7],
+  "greetings": [2],
+  "encryption": [4],
+  "thanks": [3, 11, 12, 13, 15, 20],
+  "music": [8],
+  "suggestion":[14],
+  "question": [16],
+  "my_profile": [22],
+  "no_answer_needed": [6, 26],
+  "offline": [28]
+}
