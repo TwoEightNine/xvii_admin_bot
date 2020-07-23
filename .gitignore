@@ -1,0 +1,7 @@
+notebooks/secret.py
+notebooks/.ipynb_checkpoints
+.idea
+notebooks/*.pkl
+notebooks/*.csv
+data/*
+venv
