@@ -4,7 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 random_state = 289
 
 # how many cluster do we want to find
-clusters_count = 30
+clusters_count = 50
 
 # n_components parameter for PCA (None if do not use PCA)
 pca_n_components = 0.99

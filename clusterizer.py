@@ -32,7 +32,8 @@ if __name__ == "__main__":
     tfidf_vectors = TfidfVectorizer().fit_transform(clean_messages)
     sc_model = SpectralClustering(
         n_clusters=hyperparam.clusters_count,
-        random_state=hyperparam.random_state
+        random_state=hyperparam.random_state,
+        n_jobs=-1
     ).fit(tfidf_vectors)
 
     # save messages with cluster
