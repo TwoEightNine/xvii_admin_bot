@@ -1,18 +1,11 @@
 import collections
-import pickle
-import time
 
-import pandas as pd
 from sklearn.cluster import SpectralClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 import dumper
 from transformers import *
 
-import utils
-
-data_path = 'data/'
-last_model_file = f'{data_path}last_model.txt'
 clusters_count = 30
 random_state = 289
 

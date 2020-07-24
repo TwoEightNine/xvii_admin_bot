@@ -7,10 +7,10 @@ from sklearn.pipeline import Pipeline
 data_path = 'data/'
 messages_file_name = data_path + 'messages.csv'
 messages_with_clusters_file_name = data_path + 'messages_with_clusters.csv'
-class_to_cluster_file_name = 'class_to_cluster.json'
 model_explanation_file_name = data_path + 'model_explanation.txt'
 model_pipeline_file_name = data_path + 'model_pipeline.pkl'
 model_classes_file_name = data_path + 'model_classes.pkl'
+classes_file_name = 'classes.json'
 
 key_message = 'message'
 key_cluster = 'cluster'
@@ -46,14 +46,24 @@ def save_model_explanation(explanation: str):
 
 
 def load_clusters_to_classes() -> dict:
-    with open(class_to_cluster_file_name, 'r') as f:
+    with open(classes_file_name, 'r') as f:
         class_to_clusters = json.load(f)
 
     cluster_to_class = {}
-    for klass, cl_list in class_to_clusters.items():
-        for cl in cl_list:
+    for klass, class_description in class_to_clusters.items():
+        for cl in class_description['clusters']:
             cluster_to_class[cl] = klass
     return cluster_to_class
+
+
+def load_class_responses() -> dict:
+    with open(classes_file_name, 'r') as f:
+        class_to_clusters = json.load(f)
+
+    responses = {}
+    for klass, class_description in class_to_clusters.items():
+        responses[klass] = class_description['response']
+    return responses
 
 
 def save_pipeline(pipeline: Pipeline):

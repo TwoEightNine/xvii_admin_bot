@@ -1,6 +1,3 @@
-import json
-import pickle
-
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import TfidfVectorizer

@@ -1,0 +1,70 @@
+{
+  "hi": {
+    "clusters": [
+      1,
+      5,
+      7
+    ],
+    "response": "привет"
+  },
+  "greetings": {
+    "clusters": [
+      2
+    ],
+    "response": "здравствуйте"
+  },
+  "encryption": {
+    "clusters": [
+      4
+    ],
+    "response": "шифрование"
+  },
+  "thanks": {
+    "clusters": [
+      3,
+      11,
+      12,
+      13,
+      15,
+      20
+    ],
+    "response": "пожалуйста!"
+  },
+  "music": {
+    "clusters": [
+      8
+    ],
+    "response": "к сожалению, доступ к музыке ограничен администрацией сайта, поэтому её здесь нет. подробнее: https://vk.com/dev/audio_api"
+  },
+  "suggestion": {
+    "clusters": [
+      14
+    ],
+    "response": "__UNREAD"
+  },
+  "question": {
+    "clusters": [
+      16
+    ],
+    "response": "__UNREAD"
+  },
+  "my_profile": {
+    "clusters": [
+      22
+    ],
+    "response": "напрямую посмотреть свой профиль нельзя, только через поиск или через диалоги"
+  },
+  "no_answer_needed": {
+    "clusters": [
+      6,
+      26
+    ],
+    "response": "__READ"
+  },
+  "offline": {
+    "clusters": [
+      28
+    ],
+    "response": "чтобы быть не в сети, включите данную опцию в общих настройках"
+  }
+}

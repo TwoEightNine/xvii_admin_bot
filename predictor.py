@@ -11,7 +11,7 @@ class Predictor:
         self._pipeline = pipeline
         self._classes = classes
 
-    def predict(self, message):
+    def predict(self, message: str):
         pred = self._pipeline.predict([message])
         return self.__ohe_to_label(pred)
 
