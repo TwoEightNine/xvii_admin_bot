@@ -1,18 +1,17 @@
-from string import punctuation
-
-import nltk
-from nltk.corpus import stopwords
-from pymystem3 import Mystem
 from sklearn.base import TransformerMixin, BaseEstimator
+
+import utils
 
 
 class CleanTextTransformer(TransformerMixin, BaseEstimator):
+    """
+    transformer to lemmatize and clean text. uses method from utils
+    because of pymystem3 that is not serializable and cannot be
+    pickled inside a pipeline
+    """
 
     def __init__(self) -> None:
         super().__init__()
-        self._mystem = Mystem()
-        self._russian_stopwords = stopwords.words("russian")
-        nltk.download("stopwords")
 
     def fit(self, X, y=None):
         return self
@@ -24,9 +23,4 @@ class CleanTextTransformer(TransformerMixin, BaseEstimator):
         return [self.__clean_text(text) for text in X]
 
     def __clean_text(self, text):
-        tokens = self._mystem.lemmatize(text.lower())
-        tokens = [token for token in tokens if token not in self._russian_stopwords
-                  and token != " "
-                  and token.strip() not in punctuation]
-
-        return " ".join(tokens)
+        return utils.clean_text(text)

@@ -2,6 +2,9 @@ from sklearn.base import TransformerMixin
 
 
 class DenseTransformer(TransformerMixin):
+    """
+    transformer to convert sparse array into dense array
+    """
 
     def __init__(self) -> None:
         super().__init__()

@@ -5,6 +5,8 @@ import time
 import pandas as pd
 from sklearn.cluster import SpectralClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+import dumper
 from transformers import *
 
 import utils
@@ -34,8 +36,8 @@ def get_cluster_preview(model, messages_list, cluster_num):
 
 if __name__ == "__main__":
     # process messages and explore clusters
-    messages = pd.read_csv(data_path + 'messages.csv')
-    clean_messages = CleanTextTransformer().fit_transform(messages['message'])
+    messages = dumper.load_messages()
+    clean_messages = CleanTextTransformer().fit_transform(messages)
     tfidf_vectors = TfidfVectorizer().fit_transform(clean_messages)
     sc_model = SpectralClustering(
         n_clusters=clusters_count,
@@ -43,13 +45,11 @@ if __name__ == "__main__":
     ).fit(tfidf_vectors)
 
     # save messages with cluster
-    messages['cluster'] = sc_model.labels_
-    messages.to_csv(f'{data_path}messages_with_cluster.csv', index=False)
+    dumper.save_messages_with_clusters(messages, sc_model.labels_)
 
     # save clustering results
-    model_explanation_name = f'{data_path}model_explanation.txt'
-    with open(model_explanation_name, 'w') as f:
-        for cl_i in range(clusters_count):
-            f.write(get_cluster_preview(sc_model, clean_messages, cl_i))
-    print(f'model explanation is saved to {model_explanation_name}')
+    explanation = ""
+    for cl_i in range(clusters_count):
+        explanation += get_cluster_preview(sc_model, clean_messages, cl_i)
+    dumper.save_model_explanation(explanation)
 

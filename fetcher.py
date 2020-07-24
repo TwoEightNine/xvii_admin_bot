@@ -1,10 +1,10 @@
 import time
-import pandas as pd
+
 from tqdm import tqdm
+
+import dumper
 import utils
 from notebooks.secret import no_fetch_users
-
-data_path = 'data/'
 
 
 def is_text_informative(text):
@@ -54,7 +54,4 @@ if __name__ == "__main__":
     print(f'fetched {len(messages)} messages')
 
     # save messages to data dir
-    df = pd.DataFrame()
-    df['message'] = messages
-    df.to_csv(data_path + 'messages.csv', index=False)
-    df.head(20)
+    dumper.save_messages(messages)
