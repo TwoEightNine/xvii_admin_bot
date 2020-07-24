@@ -2,25 +2,10 @@ import time
 
 from tqdm import tqdm
 
-import dumper
+import files
+import hyperparam
 import utils
-from notebooks.secret import no_fetch_users
-
-
-def is_text_informative(text):
-    """
-    defines if text is going to be informative for model
-    :param text: message to check
-    :return: true if message is informative, false if deny the message
-    """
-    return len(text) != 0 \
-           and 'CRASH REPORT' not in text \
-           and 'android.' not in text \
-           and '[service]' not in text \
-           and 'DEVICE INFORMATION' not in text \
-           and 'com.twoeightnine.root.xvii.' not in text \
-           and 'okhttp3.internal.' not in text \
-           and '[longpoll]' not in text
+from secret import no_fetch_users
 
 
 if __name__ == "__main__":
@@ -47,11 +32,11 @@ if __name__ == "__main__":
             for mess in conv['items']:
                 if mess['out'] == 0:
                     text = mess['text']
-                    if is_text_informative(text):
+                    if hyperparam.is_text_informative(text):
                         messages.append(text)
         time.sleep(.33)
 
     print(f'fetched {len(messages)} messages')
 
     # save messages to data dir
-    dumper.save_messages(messages)
+    files.save_messages(messages)

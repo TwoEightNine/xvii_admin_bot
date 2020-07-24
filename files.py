@@ -1,4 +1,5 @@
 import pickle
+import os
 
 import pandas as pd
 import json
@@ -17,6 +18,7 @@ key_cluster = 'cluster'
 
 
 def save_messages(messages: list) -> pd.DataFrame:
+    check_data_dir()
     df = pd.DataFrame()
     df[key_message] = messages
     df.to_csv(messages_file_name, index=False)
@@ -29,6 +31,7 @@ def load_messages() -> pd.Series:
 
 
 def save_messages_with_clusters(messages, clusters) -> pd.DataFrame:
+    check_data_dir()
     df = pd.DataFrame()
     df[key_message] = messages
     df[key_cluster] = clusters
@@ -41,6 +44,7 @@ def load_messages_with_clusters() -> pd.DataFrame:
 
 
 def save_model_explanation(explanation: str):
+    check_data_dir()
     with open(model_explanation_file_name, 'w') as f:
         f.write(explanation)
 
@@ -67,6 +71,7 @@ def load_class_responses() -> dict:
 
 
 def save_pipeline(pipeline: Pipeline):
+    check_data_dir()
     with open(model_pipeline_file_name, 'wb') as f:
         pickle.dump(pipeline, f)
 
@@ -77,6 +82,7 @@ def load_pipeline() -> Pipeline:
 
 
 def save_classes(classes):
+    check_data_dir()
     with open(model_classes_file_name, 'wb') as f:
         pickle.dump(classes, f)
 
@@ -84,3 +90,8 @@ def save_classes(classes):
 def load_classes():
     with open(model_classes_file_name, 'rb') as f:
         return pickle.load(f)
+
+
+def check_data_dir():
+    if not os.path.isdir(data_path):
+        os.mkdir(data_path)

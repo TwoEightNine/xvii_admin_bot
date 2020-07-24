@@ -3,11 +3,9 @@ import collections
 from sklearn.cluster import SpectralClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-import dumper
+import hyperparam
+import files
 from transformers import *
-
-clusters_count = 30
-random_state = 289
 
 
 def get_cluster_preview(model, messages_list, cluster_num):
@@ -29,20 +27,19 @@ def get_cluster_preview(model, messages_list, cluster_num):
 
 if __name__ == "__main__":
     # process messages and explore clusters
-    messages = dumper.load_messages()
+    messages = files.load_messages()
     clean_messages = CleanTextTransformer().fit_transform(messages)
     tfidf_vectors = TfidfVectorizer().fit_transform(clean_messages)
     sc_model = SpectralClustering(
-        n_clusters=clusters_count,
-        random_state=random_state
+        n_clusters=hyperparam.clusters_count,
+        random_state=hyperparam.random_state
     ).fit(tfidf_vectors)
 
     # save messages with cluster
-    dumper.save_messages_with_clusters(messages, sc_model.labels_)
+    files.save_messages_with_clusters(messages, sc_model.labels_)
 
     # save clustering results
     explanation = ""
-    for cl_i in range(clusters_count):
+    for cl_i in range(hyperparam.clusters_count):
         explanation += get_cluster_preview(sc_model, clean_messages, cl_i)
-    dumper.save_model_explanation(explanation)
-
+    files.save_model_explanation(explanation)

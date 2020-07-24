@@ -1,6 +1,6 @@
 from sklearn.pipeline import Pipeline
 import numpy as np
-import dumper
+import files
 
 class_undefined = 'undefined'
 
@@ -24,7 +24,7 @@ class Predictor:
 
 if __name__ == "__main__":
 
-    p = Predictor(dumper.load_pipeline(), dumper.load_classes())
+    p = Predictor(files.load_pipeline(), files.load_classes())
     while True:
 
         input_message = input('>>> ')

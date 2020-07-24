@@ -6,7 +6,7 @@ import requests
 from nltk.corpus import stopwords
 from pymystem3 import Mystem
 
-from notebooks.secret import access_token
+from secret import access_token
 
 base_url = 'https://api.vk.com/method/'
 

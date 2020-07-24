@@ -1,7 +1,8 @@
 import json
 import random
+import time
 
-import dumper
+import files
 import predictor
 import utils
 import requests
@@ -59,18 +60,9 @@ def send_message(user_id: int, text: str):
         print(f'sending message: {err}')
 
 
-def respond(user_id: int, message_class: str):
-    if message_class in responses:
-        response = responses[message_class]
-        if response != "":
-            send_message(user_id, response)
-        else:
-            mark_as_read(user_id)
-
-
 if __name__ == "__main__":
-    responses = dumper.load_class_responses()
-    pr = predictor.Predictor(dumper.load_pipeline(), dumper.load_classes())
+    responses = files.load_class_responses()
+    pr = predictor.Predictor(files.load_pipeline(), files.load_classes())
     while True:
         try:
             long_poll = get_long_poll()
@@ -103,3 +95,4 @@ if __name__ == "__main__":
                     is_long_poll_valid = False
         except Exception as e:
             print(f'error occurred: {e}')
+            time.sleep(5)
