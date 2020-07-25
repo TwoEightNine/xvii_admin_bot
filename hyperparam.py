@@ -1,7 +1,11 @@
 from sklearn.neighbors import KNeighborsClassifier
+from social import VkSocial, AbsSocial
 
 # globally defined random state to reproduce results
 random_state = 289
+
+# how many recent messages to fetch
+peers_count = 800
 
 # how many cluster do we want to find
 clusters_count = 50
@@ -11,6 +15,9 @@ pca_n_components = 0.99
 
 # final estimator
 estimator = KNeighborsClassifier(n_neighbors=3, weights='distance', n_jobs=-1)
+
+# delegate to work with specified social network
+social: AbsSocial = VkSocial()
 
 
 # filters non-informative messages

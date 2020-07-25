@@ -7,8 +7,8 @@ import files
 import hyperparam
 import predictor
 from transformers import *
-from sklearn.model_selection import cross_val_score, cross_validate
-from sklearn.metrics import make_scorer, f1_score
+from sklearn.model_selection import cross_validate
+from sklearn.metrics import make_scorer, f1_score, precision_score, recall_score
 
 data_path = 'data/'
 
@@ -40,18 +40,25 @@ if __name__ == "__main__":
     pipeline = Pipeline(steps)
 
     scoring = {
-        'acc': 'accuracy',
         'f1_micro': make_scorer(f1_score, average='micro'),
         'f1_macro': make_scorer(f1_score, average='macro'),
+
+        'pres_micro': make_scorer(precision_score, average='micro'),
+        'pres_macro': make_scorer(precision_score, average='macro'),
+
+        'rec_micro': make_scorer(recall_score, average='micro'),
+        'rec_macro': make_scorer(recall_score, average='macro'),
     }
     scores = cross_validate(pipeline,
                             messages_with_clusters['message'],
                             class_ohe,
                             scoring=scoring,
                             cv=5)
-    print(f'micro-f1 score: {scores["test_f1_micro"].mean():.3f} +-({scores["test_f1_micro"].std():.3f})')
-    print(f'macro-f1 score: {scores["test_f1_macro"].mean():.3f} +-({scores["test_f1_macro"].std():.3f})')
-    # print(f'accuracy score: {scores["test_acc"].mean():.3f} +-({scores["test_acc"].std():.3f})')
+    for score_key in scoring.keys():
+        print(f'{score_key} score: '
+              f'{scores[f"test_{score_key}"].mean():.3f} '
+              f'+-({scores[f"test_{score_key}"].std():.3f})')
+
     pipeline.fit(messages_with_clusters['message'], class_ohe)
 
     files.save_pipeline(pipeline)

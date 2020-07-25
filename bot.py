@@ -1,98 +1,37 @@
-import json
-import random
 import time
 
 import files
+import hyperparam
 import predictor
-import utils
-import requests
 
 marker_leave_unread = '__UNREAD'
 marker_mark_as_read = '__READ'
 
-
-class LongPoll:
-
-    def __init__(self, server, key, ts):
-        self._server = server
-        self._key = key
-        self.ts = ts
-
-    def get_url(self):
-        return f"https://{self._server}" \
-            f"?act=a_check&key={self._key}" \
-            f"&ts={self.ts}&wait=50&mode=2&version=1"
-
-
-def get_long_poll():
-    error, response = utils.execute('messages.getLongPollServer', {'lp_version': 2})
-    if error is None:
-        return LongPoll(response['server'], response['key'], response['ts'])
-
-
-def wait_for_messages(lp: LongPoll) -> tuple:
-    response = requests.get(lp.get_url())
-    if response.status_code == 200:
-        response = json.loads(response.text)
-        ts = response.get('ts', 0)
-        updates = response.get('updates', [])
-        failed = response.get('failed', 0)
-        messages = [(upd[3], upd[6]) for upd in updates
-                    if len(upd) >= 7 and upd[0] == 4 and upd[2] & 2 == 0]
-        return ts, messages
-    else:
-        return 0, []
-
-
-def mark_as_read(user_id: int):
-    err, response = utils.execute('messages.markAsRead', {'peer_id': user_id})
-    if err is not None:
-        print(f'marking as read: {err}')
-
-
-def send_message(user_id: int, text: str):
-    err, response = utils.execute('messages.send', {
-        'peer_id': user_id,
-        'message': text,
-        'random_id': random.randint(0, 65535)
-    })
-    if err is not None:
-        print(f'sending message: {err}')
-
-
 if __name__ == "__main__":
     responses = files.load_class_responses()
     pr = predictor.Predictor(files.load_pipeline(), files.load_classes())
+    social = hyperparam.social
     while True:
         try:
-            long_poll = get_long_poll()
-            print('longpoll server obtained..')
-            is_long_poll_valid = True
-            while is_long_poll_valid:
-                ts, messages = wait_for_messages(long_poll)
-                if ts != 0:
-                    for message in messages:
-                        user_id, message_text = message
-                        message_class = pr.predict(message_text)
-                        print(f'{user_id}: {message_text} ({message_class})')
+            messages = social.wait_for_messages()
+            for message in messages:
+                message_class = pr.predict(message.text)
+                print(f'{message.peer_id}: {message.text} ({message_class})')
 
-                        # find response
-                        if message_class in responses:
-                            response = responses[message_class]
-                        else:
-                            response = marker_leave_unread
-                        print(f'response: {response}')
-
-                        # perform action according to response
-                        if response == marker_mark_as_read:
-                            mark_as_read(user_id)
-                        elif response != marker_leave_unread:
-                            send_message(user_id, response)
-
-                        print('')
-                    long_poll.ts = ts
+                # find response
+                if message_class in responses:
+                    response = responses[message_class]
                 else:
-                    is_long_poll_valid = False
+                    response = marker_leave_unread
+                print(f'response: {response}')
+
+                # perform action according to response
+                if response == marker_mark_as_read:
+                    social.mark_message_as_read(message.peer_id, message.id)
+                elif response != marker_leave_unread:
+                    social.send_message(message.peer_id, response)
+
+                print('')
         except Exception as e:
             print(f'error occurred: {e}')
             time.sleep(5)

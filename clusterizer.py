@@ -19,7 +19,7 @@ def get_cluster_preview(model, messages_list, cluster_num):
     total = len(cluster_messages)
     preview += f'\ncluster {cluster_num}: words size = {total}\n'
     for word, cnt in count.items():
-        if cnt > total * 0.1:
+        if cnt > total * 0.05:
             preview += f'{word} {cnt / total * 100:.2f}%\t\t'
     preview += '\n'
     return preview
