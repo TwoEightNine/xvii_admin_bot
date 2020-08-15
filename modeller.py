@@ -10,8 +10,6 @@ from transformers import *
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import make_scorer, f1_score, precision_score, recall_score
 
-data_path = 'data/'
-
 class_undefined = 'undefined'
 
 if __name__ == "__main__":

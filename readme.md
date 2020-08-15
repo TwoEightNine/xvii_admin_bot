@@ -1,6 +1,9 @@
-## russian answer bot for vk groups
+## russian answer bot for groups of vk (and not only)
 
-this is ML-solution to create a bot for vk groups. the bot's behavior is based on real users' messages sent earlier. currently the bot supports only russian language
+this is ML-solution to create a bot for groups of vk social network 
+(but you can easily create your own social network delegate).
+the bot's behavior is based on real users' messages sent earlier. 
+currently the bot supports only russian language
 
 this bot was created to assist me with answering the most frequent questions in vk group's messages (see [xvii messenger for vk](https://github.com/TwoEightNine/XVII))
 
@@ -41,8 +44,12 @@ no_fetch_users = [13371337228]
 
 to fetch messages run
 ```bash
-python3 fetcher.py
+python3 fetcher.py --count COUNT --social SOCIAL [-h]
 ```
+
+where `COUNT` is how many dialogs to fetch to get messages from, 
+`SOCIAL` is which social network to use. request `-h` help
+to see which social networks are supported
 
 the script will load messages into `data/messages.csv`
 
@@ -53,14 +60,23 @@ fetched messages are being lemmatized and cleaned, then converted to tf-idf vect
 spectral clustering is used. to perform clustering run:
 
 ```bash
-python3 clusterizer.py
+python3 clusterizer.py [--search] [--clusters_count CL_COUNT] --random_state RND_ST [-h]
 ```
 
-this script will create `data/model_explanation.txt` 
+where `--search` is an optional flag to perform search for better clusters count,
+`--clusters_count` is required to perform final clustering, 
+defines preferred number of clusters,
+`--random_state` is a random int for better reproducibility
+
+you may want to run search (with `--search` flag) to calculate clustering metrics
+for different number of clusters. in this case the script will print this information
+
+after search you have already defined 'good' clusters count for your task.
+now run this script again but with `--clusters_count YOUR_VALUE` and 
+the script will create `data/model_explanation.txt` 
 with information about the most frequent words in every cluster.
 if you think that the result of clustering is not so good,
-you can rerun clustering with other number of cluster or other random state.
-just update related fields in file `hyperparam.py` and rerun the script
+you can rerun clustering with other number of cluster or other random state
 
 
 using the data you are going to create `classes.json` in next format:
