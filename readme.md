@@ -110,17 +110,37 @@ but the conversation will be left read (no answer needed) or unread
 all not mentioned clusters implicitly belong to class `undefined` 
 with response `__UNREAD`
 
-#### step 3. train model
+#### step 3. find and train a model
 
-after you created `classes.json` you can train a model to
-perform predictions. currently the model uses pca and knn.
-(in future i want to add kind of search through different models)
+after you created `classes.json` you can start to search for and train a model to
+perform predictions. 
+
+to search execute
+
+```bash
+python3 modeller.py --search [--cv CV] [--sort_by METRIC]
+```
+
+where `--search` is an optional flag that indicates that you want to
+perform search (using sklearn's `GridSearch`), 
+`CV` is how many k-folds to use in cross validation,
+`METRIC` is a metric alias to sort by
+
+you can use default search params (like estimators and parameters) 
+or define own in `hyperparams.py` (variable `search_estimators`)
+
+after search you can see 5 best results (according to `--sort_by`)
+and explore all configurations in `data/search_results.csv`. best model
+should be set in `hyperparams.py` as `final_estimator`
 
 to train a model run
 
 ```bash
-python3 modeller.py
+python3 modeller.py [--cv CV] [--pca_n_components N_COM]
 ```
+
+where `N_COM` is an argument for `PCA()`'s `n_components` value,
+if not set, PCA is not used
 
 `data/model_pipeline.pkl` and `data/model_classes.pkl` will be created
 
@@ -137,7 +157,7 @@ enter russian message and see which class the model thinks it belongs to
 the bot is ready to start. to launch it enter
 
 ```bash
-python3 bot.py
+python3 bot.py --social SOCIAL
 ```
 
 in stdout you will see status messages, incoming messages and 

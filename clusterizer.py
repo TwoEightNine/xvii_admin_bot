@@ -5,7 +5,6 @@ from sklearn.cluster import SpectralClustering
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
 
-import hyperparam
 import files
 from transformers import *
 
@@ -85,7 +84,6 @@ if __name__ == "__main__":
     messages = files.load_messages()
     clean_messages = CleanTextTransformer().fit_transform(messages)
     tfidf_vectors = TfidfVectorizer().fit_transform(clean_messages)
-    tfidf_dense = tfidf_vectors.todense()
 
     if args.search:
         investigate_clusters(tfidf_vectors, args.random_state)
@@ -97,6 +95,6 @@ if __name__ == "__main__":
 
         # save clustering results
         explanation = ""
-        for cl_i in range(hyperparam.clusters_count):
+        for cl_i in range(args.clusters_count):
             explanation += get_cluster_preview(cluster_model, clean_messages, cl_i)
         files.save_model_explanation(explanation)

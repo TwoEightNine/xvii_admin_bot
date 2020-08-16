@@ -11,6 +11,7 @@ messages_with_clusters_file_name = data_path + 'messages_with_clusters.csv'
 model_explanation_file_name = data_path + 'model_explanation.txt'
 model_pipeline_file_name = data_path + 'model_pipeline.pkl'
 model_classes_file_name = data_path + 'model_classes.pkl'
+model_search_results = data_path + 'search_results.csv'
 classes_file_name = 'classes.json'
 
 key_message = 'message'
@@ -90,6 +91,10 @@ def save_classes(classes):
 def load_classes():
     with open(model_classes_file_name, 'rb') as f:
         return pickle.load(f)
+
+
+def save_search_results(results: pd.DataFrame):
+    results.to_csv(model_search_results, index=False)
 
 
 def check_data_dir():
