@@ -1,28 +1,24 @@
 from core.social import AbsSocial
-from core.logger import Logger
-from .fetch_output import FetchOutput
-from .fetch_params import FetchParams
+from .models import FetchParams
+from .fetch_progress import FetchProgress
 
 
 class Fetcher:
 
-    def __init__(self, params: FetchParams, output: FetchOutput, social: AbsSocial, logger: Logger):
+    def __init__(self, params: FetchParams, social: AbsSocial, progress: FetchProgress):
         self.params = params
-        self.output = output
         self.social = social
-        self.logger = logger
+        self.progress = progress
         self.messages = []
 
     def fetch_messages(self):
         # fetch user ids to fetch message history
+        self.progress.on_fetching_started()
         user_ids = self.social.get_list_of_peers(self.params.peers_count)
-        self.logger.log(f'fetched {len(user_ids)} dialogs')
+        self.progress.on_peers_fetched(len(user_ids))
 
         # fetch message history as a list of messages
         for i, user_id in enumerate(user_ids):
             self.messages += self.social.get_messages(user_id)
-            self.logger.indicate_progress(i + 1, len(user_ids))
-        self.logger.log(f'fetched {len(self.messages)} messages')
-
-    def save_messages(self):
-        self.output.save_messages(self.messages)
+            self.progress.on_fetched_messages_out_of(i + 1, len(user_ids))
+        self.progress.on_messages_fetched()

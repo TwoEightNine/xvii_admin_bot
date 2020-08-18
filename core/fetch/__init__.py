@@ -1,3 +1,3 @@
 from .fetcher import Fetcher
-from .fetch_params import FetchParams
-from .fetch_output import FetchOutput
+from .models import FetchParams, Message
+from .fetch_progress import FetchProgress

@@ -8,6 +8,10 @@ class AbsSocial(ABC):
     """
 
     @abstractmethod
+    def set_api_keys(self, api_keys):
+        pass
+
+    @abstractmethod
     def get_list_of_peers(self, size: int) -> list:
         """
         fetches list of ids of peers to obtain message history
@@ -52,4 +56,3 @@ class AbsSocial(ABC):
         :return: list of Message
         """
         pass
-
