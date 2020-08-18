@@ -16,6 +16,9 @@ class CsvMessageDataSource(MessageDataSource):
             messages = pd.read_csv(self.file_name)
             messages = [Message(item[self.column_message_id], item[self.column_peer_id], item[self.column_text])
                         for item in messages.iloc]
+            for message in messages:
+                if message.text != message.text:
+                    message.text = ""
             return messages
         except Exception as e:
             return []
