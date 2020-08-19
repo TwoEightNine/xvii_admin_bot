@@ -1,5 +1,6 @@
 from .fetch import *
 from .exploreclusters import *
+from .makeclusters import *
 from .bot import *
 
 from .model import *

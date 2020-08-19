@@ -1,2 +1,4 @@
 from .message_data_source import MessageDataSource
 from .cluster_explorer_data_source import ClusterExplorerDataSource
+from .clustered_message_data_source import ClusteredMessageDataSource
+from .clusters_explanation_data_source import ClustersExplanationDataSource

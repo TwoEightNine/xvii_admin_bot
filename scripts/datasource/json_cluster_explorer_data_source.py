@@ -13,7 +13,7 @@ class JsonClusterExplorerDataSource(ClusterExplorerDataSource):
     def save_results(self, results: ExplorerResults):
         with open(self.file_name, 'w') as fp:
             results = {'results': results.get_results()}
-            json.dump(results, fp)
+            json.dump(results, fp, indent=4)
 
     def get_results(self) -> ExplorerResults:
         results = ExplorerResults()
