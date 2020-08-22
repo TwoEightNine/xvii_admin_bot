@@ -9,10 +9,15 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--peers_count', required=True, type=int, help='how many recent dialogs to fetch')
     parser.add_argument('-s', '--social', required=True,
                         help=f'which social network to use; supported values = {SocialFactoryImpl.supported_values}')
+    parser.add_argument('-f', '--filter_py',
+                        help='python file with defined `def filter_func(message: Message) -> bool` to filter messages')
     args = parser.parse_args()
 
     messages_csv = "/tmp/messages.csv"
     os.system(f"python3 scripts/fetcher.py -p {args.peers_count} -s {args.social} -o {messages_csv}")
+
+    if args.filter_py:
+        os.system(f"python3 scripts/message_filterer.py -m {messages_csv} -f {args.filter_py}")
 
     cluster_exploration_json = "/tmp/clusters.json"
     random_state = 289

@@ -3,6 +3,7 @@ import random
 import time
 
 import requests
+from typing import List
 
 from core.social import AbsSocial
 from core.model import Message
@@ -40,13 +41,13 @@ class VkSocial(AbsSocial):
             remain -= count
         return peer_ids
 
-    def get_messages(self, peer_id: int) -> list:
+    def get_messages(self, peer_id: int) -> List[Message]:
         messages = []
         err, conv = self.__execute('messages.getHistory', {'count': 200, 'user_id': peer_id})
         if err is None:
             for mess in conv['items']:
                 if mess['out'] == 0:
-                    message = Message(mess['id'], peer_id, mess['text'])
+                    message = Message(mess['id'], peer_id, mess['text'], mess['date'])
                     messages.append(message)
         return messages
 
@@ -62,7 +63,7 @@ class VkSocial(AbsSocial):
         })
         return err is None
 
-    def wait_for_messages(self) -> list:
+    def wait_for_messages(self) -> List[Message]:
         self.__update_long_poll()
         response = requests.get(self.__get_lp_url())
         if response.status_code == 200:
@@ -74,7 +75,7 @@ class VkSocial(AbsSocial):
             else:
                 self._ts = ts
                 updates = response.get('updates', [])
-                messages = [Message(upd[1], upd[3], upd[6]) for upd in updates
+                messages = [Message(upd[1], upd[3], upd[6], upd[4]) for upd in updates
                             if len(upd) >= 7 and upd[0] == 4 and upd[2] & 2 == 0]
                 return messages
         else:

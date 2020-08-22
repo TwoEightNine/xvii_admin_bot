@@ -1,2 +1,2 @@
-from .models import TimeConstraint, FilterParams, FilterResult
+from .models import FilterParams, FilterResult
 from .filterer import MessageFilterer

@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import List
+
+from core.model import Message
 
 
 class AbsSocial(ABC):
@@ -21,11 +24,11 @@ class AbsSocial(ABC):
         pass
 
     @abstractmethod
-    def get_messages(self, peer_id: int) -> list:
+    def get_messages(self, peer_id: int) -> List[Message]:
         """
         fetches list of messages for given peer
         :param peer_id: if od peer
-        :return: messages as a list of strings
+        :return: messages as a list of Message objects
         """
         pass
 
@@ -50,7 +53,7 @@ class AbsSocial(ABC):
         pass
 
     @abstractmethod
-    def wait_for_messages(self) -> list:
+    def wait_for_messages(self) -> List[Message]:
         """
         runs periodically to obtain new messages
         :return: list of Message

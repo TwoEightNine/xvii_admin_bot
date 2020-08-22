@@ -1,8 +1,7 @@
-from typing import List
+from typing import Callable
 
 
 class FilterArgs:
 
-    def __init__(self, ignored_peers: List[int], ignored_substrs: List[str]):
-        self.ignored_peers = ignored_peers
-        self.ignored_substrs = ignored_substrs
+    def __init__(self, filter_func: Callable):
+        self.filter_func = filter_func
