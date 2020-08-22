@@ -1,7 +1,7 @@
 import argparse
 import os
-import json
 
+from scripts.datasource import JsonClusterExplorerDataSource
 from scripts.social import SocialFactoryImpl
 
 if __name__ == "__main__":
@@ -18,16 +18,17 @@ if __name__ == "__main__":
     random_state = 289
     os.system(f"python3 scripts/cluster_explorer.py -i {messages_csv} -o {cluster_exploration_json} -r {random_state}")
 
-    metrics = "silhouette_score"
-    with open(cluster_exploration_json, 'r') as fp:
-        exploration_data = json.load(fp)['results']
-        best_clusters_count = 2
-        best_metrics = 0.0
-        for cl_cnt, m in exploration_data.items():
-            if m[metrics] > best_metrics:
-                best_metrics = m[metrics]
-                best_clusters_count = cl_cnt
-    print(f'best clusters count ({metrics}) = {best_clusters_count}')
+    cluster_explorer_data_source = JsonClusterExplorerDataSource(cluster_exploration_json)
+    exploration_results = cluster_explorer_data_source.get_results()
+
+    best_metrics = 0.0
+    best_clusters_count = 2
+    for cl_cnt, m in exploration_results.get_results().items():
+        if m.silhouette > best_metrics:
+            best_metrics = m.silhouette
+            best_clusters_count = cl_cnt
+    print(f'best clusters count = {best_clusters_count}')
+
     messages_with_clusters_csv = "/tmp/messages_with_clusters.csv"
     clusters_explanation_json = "/tmp/clusters_explanation.json"
     os.system(f"python3 scripts/cluster_maker.py -i {messages_csv} -om {messages_with_clusters_csv} "
